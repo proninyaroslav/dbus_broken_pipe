@@ -1,0 +1,48 @@
+app-id: org.test.flutter_application_1
+runtime: org.gnome.Platform
+runtime-version: '40'
+sdk: org.gnome.Sdk
+command: flutter_application_1
+separate-locales: false
+finish-args:
+  # Required due to being a GUI application
+  - --socket=x11
+  - --socket=fallback-x11
+  # Required to make sure x11 performance is achived on all platforms
+  # At least that's what the legends tell. it might be worth experimenting
+  # with dropping this permission.
+  - --share=ipc
+  # Required for experimental wayland support
+  - --socket=wayland
+  # Required to provide notification functionality
+  - --socket=pulseaudio
+  - --device=all
+  # Required for notifications in various desktop environments
+  - --talk-name=org.freedesktop.Notifications
+  - --talk-name=org.kde.StatusNotifierWatcher
+  # Required due to KDE's special way of handling notifications
+  - --own-name=org.kde.StatusNotifierItem-2-1
+cleanup:
+  - /include
+  - /lib/cmake
+  - /lib/pkgconfig
+  - /lib/*.a
+modules:
+  - name: flutter_application_1
+    buildsystem: simple
+    only-arches:
+      - x86_64
+    build-commands:
+      - mkdir -p /app
+      - cp -r flutter_application_1 /app/flutter_application_1
+      - chmod +x /app/flutter_application_1/flutter_application_1
+      - mkdir -p /app/bin /app/lib
+      - ln -s /app/flutter_application_1/flutter_application_1 /app/bin/flutter_application_1
+      - install -Dm644 org.test.flutter_application_1.desktop /app/share/applications/org.test.flutter_application_1.desktop
+    sources:
+      - type: archive
+        path: ./bundle.tar.gz
+        dest: flutter_application_1
+        strip-components: 0
+      - type: file
+        path: org.test.flutter_application_1.desktop

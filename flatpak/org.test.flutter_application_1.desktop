@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=flutter_application_1
+Exec=flutter_application_1 %U
+TryExec=flutter_application_1
+Terminal=false
+Type=Application
